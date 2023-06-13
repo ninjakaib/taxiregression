@@ -3,6 +3,8 @@
 
 **Please refer to [this](https://github.com/ninjakaib/taxiregression/blob/main/final%20report.pdf) version of the final report instead of the gradescope one. There are no changes to the report besides the inclusion of a brief note under the table for different models and the figures which I was having an error with Overleaf and could not get them to properly render until a few minutes after the submission closed.**
 
+**UPDATE: This version of the final report was submitted to gradescope when the submissions were reopened. No change from the original on time submission except the figures.**
+
 * * *
 
 ## Model Inference
