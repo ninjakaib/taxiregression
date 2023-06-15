@@ -8,6 +8,41 @@
 * * *
 
 ## Model Inference
+**UPDATED FOR EASE OF USE**  
+https://drive.google.com/file/d/1A3oIjLo-8HkSixEF0172nRStHydzy83C/view?usp=sharing
+
+```python
+!pip install autogluon
+from autogluon.tabular import TabularDataset, TabularPredictor
+from datetime import datetime
+import numpy as np
+import pandas as pd
+
+data = TabularDataset('test_public.csv').set_index('TRIP_ID').drop(['DAY_TYPE','MISSING_DATA'], axis=1)
+categorical_cols = ['CALL_TYPE','ORIGIN_CALL','ORIGIN_STAND','TAXI_ID']
+data[categorical_cols] = data[categorical_cols].astype('category')
+data['TIMESTAMP'] = data['TIMESTAMP'].apply(datetime.fromtimestamp)
+
+# Feature generation is handled by the models internal pipeline
+path_to_model = 'wherever your download is'
+predictor = TabularPredictor.load(f'{path_to_model}/ag-20230608_160530', require_version_match=False, require_py_version_match=False)
+preds = predictor.predict(data).rename('TRAVEL_TIME')
+preds.to_csv('predictions.csv')
+```
+If you get errors with the path when loading, this is likely due to the model being trained in a different environment.  
+Try using this code to fix the path issue and tweak as necessary:  
+```python
+pathtomodel = '...'
+trainer = pd.read_pickle(f'{pathtomodel}/models/trainer.pkl')
+models = list(trainer.model_graph.nodes)
+for model in models:
+    trainer.set_model_attribute(model, 'path', f'{pathtomodel}/models/{model}/')
+trainer.get_models_attribute_dict('path')
+```
+
+
+* * *
+**This is the better version of the model but it has some issues running on different OS than it was trained on and some other weird bugs.**
 To make predictions with the model, grab the model files here: https://drive.google.com/drive/folders/19CmhXSCVZlvpceNIafC_WRiMCgVImsUS?usp=drive_link
 
 And run the code below
